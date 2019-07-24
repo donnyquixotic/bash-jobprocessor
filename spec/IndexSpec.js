@@ -1,3 +1,4 @@
+//functions should be modularized & exported for testing, example purposes only
 let checkIfDepsCompleted = (arr, target) => target.every(v => arr.includes(v))
 
 describe("checker function", function() {
