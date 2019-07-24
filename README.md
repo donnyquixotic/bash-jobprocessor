@@ -99,6 +99,10 @@ If errors occur you may have to install globally:
 
 ## Notes/Future Improvements/Issues
 
+<aside class="notice">
+Warning: This program uploads and executes shell commands locally, it is not advisable to run code, as is, on a public production environment
+</aside>
+
 Currently there is no error handling for cyclical dependencies or job status requests for non-existant jobs. 
 
 A previous version used a topological sort to arange the jobs in order of dependency as in a directed graph before iterating over the jobs but the execution time (though did detect circular dependencies before processing any jobs) difference was negligible for smaller files and my small sample testing showed the topological sort to average a little slower. 
