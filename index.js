@@ -151,14 +151,18 @@ function startServer() {
         let jobId = req.query.jobId
         let status = jobSpecs.completedJobs.includes(jobId)
         if (status){
-            res.json('success')
-            res.end()
+            res.send('success')
         }
         //if the job hasn't completed it will wait the exit event 
         myEmitter.on('job-success', async (job_id) => {
             if (jobId == job_id){
-                await res.json('success')
+                try {
+                    await res.send('success')
+                } catch(error){
+                    return;
+                }
             }
+             
         })
     })
 
@@ -168,14 +172,19 @@ function startServer() {
         let jobId = req.params.jobId
         let status = jobSpecs.completedJobs.includes(jobId)
         if (status){
-            res.json('success')
-            res.end()
+            res.send('success')
         }
         //if the job hasn't completed it will wait the exit event 
+    
         myEmitter.on('job-success', async (job_id) => {
             if (jobId == job_id){
-                await res.json('success')
+                try {
+                    await res.send('success')
+                } catch(error){
+                    return;
+                }
             }
+
         })
     })
 
