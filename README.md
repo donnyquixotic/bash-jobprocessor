@@ -84,11 +84,12 @@ The program can be run standalone to process a single file or can optionally run
 
 ## Notes
 
-Currently there is no error handling for cyclical dependencies.
+Currently there is no error handling for cyclical dependencies or job status requests for non-existant jobs. 
 
 A previous version used a topological sort to arange the jobs in order of dependency as in a directed graph before iterating over the jobs but the execution time (though did detect circular dependencies before processing any jobs) difference was negligible for smaller files and my small sample testing showed the topological sort to average a little slower. 
 
 ## External modules used
 
 express - https://www.npmjs.com/package/express
+
 express-fileupload - https://www.npmjs.com/package/express-fileupload
