@@ -85,7 +85,7 @@ The program can be run standalone to process a single file or can optionally run
 
 There are three test job files provided. `test.txt` is the example provided above. `test2.txt` is a copy of `test.txt` with sleep commands added to jobs 2 & 3 to allow interactive testing of concurrency, api status requests, and jobs with identical names. `test3.txt` is a copy of `test2.txt` with incremented `job_id` numbers. 
 
-A testing suite has been started but TDD was not strictly adopted in the interest of time.
+A testing suite has been started but TDD was not strictly adopted in the interest of time. Processing & API should be modularized & exported for testing.
 
 run tests:
 
@@ -105,7 +105,7 @@ A previous version used a topological sort to arange the jobs in order of depend
 
 There is a lot of room for substantial refactoring, and more error handling for edge cases & bad input. 
 
-Also, api/route logic should be separated and run as an independent module.
+Also, api/route logic should be separated and run as an independent module as well as the processing logic.
 
 ## External modules used
 
