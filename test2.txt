@@ -1,0 +1,13 @@
+# id identifying job in rest of file.
+job_id job1
+# program and arguments. run the program through the bash shell.
+program cat /tmp/file2 /tmp/file3 /tmp/file4
+# jobs depended on.
+parent_job_ids job2 job3 job4
+job_id job2
+program sleep 10 && echo hi > /tmp/file2
+job_id job3
+program sleep 10 && echo bye > /tmp/file3
+job_id job4
+program cat /tmp/file2 > /tmp/file4; echo again >> /tmp/file4
+parent_job_ids job2

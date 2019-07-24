@@ -1,0 +1,17 @@
+{
+  "name": "jobprocessor",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "test",
+    "server": "node index.js server",
+    "process": "node index.js process"
+  },
+  "author": "Don Peat",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.17.1",
+    "express-fileupload": "^1.1.5"
+  }
+}
