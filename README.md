@@ -81,6 +81,12 @@ The program can be run standalone to process a single file or can optionally run
 
   `node index.js server <thread_limit>`
 
+## Testing
+
+There are three test job files provided. `test.txt` is the example provided above. `test2.txt` is a copy of `test.txt` with sleep commands added to jobs 2 & 3 to allow interactive testing of concurrency, api status requests, and jobs with identical names. `test3.txt` is a copy of `test2.txt` with incremented `job_id` numbers. 
+
+Ideally there would be a testing suite using mocha/chai,
+
 
 ## Notes/Future Improvements/Issues
 
@@ -88,7 +94,9 @@ Currently there is no error handling for cyclical dependencies or job status req
 
 A previous version used a topological sort to arange the jobs in order of dependency as in a directed graph before iterating over the jobs but the execution time (though did detect circular dependencies before processing any jobs) difference was negligible for smaller files and my small sample testing showed the topological sort to average a little slower. 
 
-Ideally there would be a testing suite using mocha/chai, more substantial refactoring, and more error handling for edge cases & bad input. Also, api/route logic should be separated and run as an independent module.
+There is a lot of room for substantial refactoring, and more error handling for edge cases & bad input. 
+
+Also, api/route logic should be separated and run as an independent module.
 
 ## External modules used
 
