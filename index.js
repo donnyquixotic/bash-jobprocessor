@@ -6,7 +6,7 @@ const fs = require('fs'),
     events = require('events'),
     jobEmitter = new events.EventEmitter(),
 
-    //main job object for tracking job completion & concurent processes
+    //global jobs object for tracking job completion & concurent processes
     jobSpecs = {
         thread_limit : 999,
         thread_count : 0,
@@ -99,14 +99,14 @@ let clearJobs = () => {
 //check if any remaining jobs have any incomplete dependencies
 let checkDeps = () => {
     for (let k=0; k < jobSpecs.jobQueue.length; k++){
-        if (checker(jobSpecs.completedJobs,jobSpecs.jobQueue[k].parent_job_ids)){
+        if (checkIfDepsCompleted(jobSpecs.completedJobs,jobSpecs.jobQueue[k].parent_job_ids)){
             let temp = new JobClass(jobSpecs.jobQueue[k])
             temp.runJob()
         }
     }
 }
 
-let checker = (arr, target) => target.every(v => arr.includes(v))
+let checkIfDepsCompleted = (arr, target) => target.every(v => arr.includes(v))
 
 //on completion add job to completion queue and check remaining jobs for dependency
 jobEmitter.on('job-success', (job_id) => {
@@ -205,4 +205,3 @@ function startServer() {
         })
     })
 }
-

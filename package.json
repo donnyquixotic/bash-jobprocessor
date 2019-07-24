@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "test",
+    "test": "jasmine-node spec/",
     "server": "node index.js server",
     "process": "node index.js process"
   },
@@ -12,6 +12,8 @@
   "license": "ISC",
   "dependencies": {
     "express": "^4.17.1",
-    "express-fileupload": "^1.1.5"
-  }
+    "express-fileupload": "^1.1.5",
+    "jasmine-node": "^3.0.0"
+  },
+  "devDependencies": {}
 }

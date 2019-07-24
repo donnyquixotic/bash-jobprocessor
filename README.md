@@ -85,8 +85,17 @@ The program can be run standalone to process a single file or can optionally run
 
 There are three test job files provided. `test.txt` is the example provided above. `test2.txt` is a copy of `test.txt` with sleep commands added to jobs 2 & 3 to allow interactive testing of concurrency, api status requests, and jobs with identical names. `test3.txt` is a copy of `test2.txt` with incremented `job_id` numbers. 
 
-Ideally there would be a testing suite using mocha/chai,
+A testing suite has been started but TDD was not strictly adopted in the interest of time.
 
+run tests:
+
+`npm test` or `jasmine-node spec/`
+
+Additional tests should follow the naming convention of `FooSpec.js`, `BarSpec.js`, case-sensitive and saved in the `spec/` directory 
+
+If errors occur you may have to install globally:
+
+`npm install jasmine-node -g`
 
 ## Notes/Future Improvements/Issues
 
