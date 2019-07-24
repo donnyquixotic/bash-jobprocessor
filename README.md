@@ -99,7 +99,7 @@ If errors occur you may have to install globally:
 
 ## Notes/Future Improvements/Issues
 
-<aside class="notice">
+<aside class="warning">
 Warning: This program uploads and executes shell commands locally, it is not advisable to run code, as is, on a public production environment
 </aside>
 
