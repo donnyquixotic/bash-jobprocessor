@@ -112,3 +112,5 @@ Also, api/route logic should be separated and run as an independent module as we
 express - https://www.npmjs.com/package/express
 
 express-fileupload - https://www.npmjs.com/package/express-fileupload
+
+jasmine-node - https://www.npmjs.com/package/jasmine-node
