@@ -27,6 +27,7 @@ class JobClass {
         if (jobSpecs.thread_count < jobSpecs.thread_limit){
             jobSpecs.thread_count++
             jobEmitter.emit('job-running', this.job_id)
+            //execute job with child process
             const child = exec(this.program, function(error, stdout, stderr){
                 if (error) {
                     console.error( _this.job_id + ` Failed to execute: ${error}`)
@@ -36,6 +37,7 @@ class JobClass {
                     console.log(stdout)
                 }
             })
+            //on job/child process completion, emit to api & trigger next job
             child.on('exit', code => {
                 jobSpecs.thread_count--
                 jobEmitter.emit('job-success', _this.job_id)
@@ -126,8 +128,6 @@ let run = () => {
 
 run() //main function call
 
-
-
 /*********SERVER & API************/
 
 function startServer() {
@@ -139,7 +139,6 @@ function startServer() {
     app.use(fileUpload())
     app.use('/css',express.static(__dirname +'/css'));
     app.listen(3000) 
-
 
     //serve generic html file with inputs
     app.get('/', function(req, res) {
@@ -166,7 +165,6 @@ function startServer() {
         })
     })
 
-
     //handle direct job status request url endpoint
     app.get('/status/:jobId', (req, res, next) => {
         let jobId = req.params.jobId
@@ -174,8 +172,8 @@ function startServer() {
         if (status){
             res.send('success')
         }
-        //if the job hasn't completed it will wait the exit event 
-    
+        
+        //if the job hasn't completed it will wait until exit event & update with success status 
         jobEmitter.on('job-success', async (job_id) => {
             if (jobId == job_id){
                 try {
@@ -184,7 +182,6 @@ function startServer() {
                     return;
                 }
             }
-
         })
     })
 
