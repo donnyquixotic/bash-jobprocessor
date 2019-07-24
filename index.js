@@ -71,6 +71,7 @@ let parseArgs = () => {
 
 //clean txt file and create job array, return job id for api 
 let parseJobFile = (filePath) => {
+    clearJobs();
     const contents = fs.readFileSync(filePath, 'utf8')
     const regex = /^#(.*)[\n]|\n$/mg // regex matching blank new lines & hash comments
     let lines = contents.replace(regex,'').split('\n') // remove blank lines & comments
@@ -88,6 +89,11 @@ let parseJobFile = (filePath) => {
         jobSpecs.jobQueue.push(job)
     }
     return jobSpecs.jobQueue[0].job_id
+}
+
+let clearJobs = () => { 
+    jobSpecs.jobQueue = [] 
+    jobSpecs.completedJobs = []
 }
 
 //check if any remaining jobs have any incomplete dependencies
@@ -119,6 +125,8 @@ let run = () => {
 }
 
 run() //main function call
+
+
 
 /*********SERVER & API************/
 
