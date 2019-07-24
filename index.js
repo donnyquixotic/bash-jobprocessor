@@ -8,101 +8,54 @@ const fs = require('fs'),
     fileUpload = require('express-fileupload'),
     events = require('events'),
     myEmitter = new events.EventEmitter(),
+
+    //main job object for tracking job completion & concurent processes
     jobSpecs = {
-        thread_limit : 9999,
+        thread_limit : 999,
         thread_count : 0,
         jobQueue : [],
         completedJobs : []
     }
 
+
+//A class instance is created for each job to execute job & track job status
 class JobClass {
 
     constructor(job) {
-        this.job_id= job.job_id;
-        this.program = job.program;
+        this.job_id= job.job_id
+        this.program = job.program
     }
 
     runJob() {
-        var _this = this;
+        let _this = this
         if (jobSpecs.thread_count < jobSpecs.thread_limit){
             jobSpecs.thread_count++
-            myEmitter.emit('job-running', this.job_id);
+            myEmitter.emit('job-running', this.job_id)
             const child = exec(this.program, function(error, stdout, stderr){
                 if (error) {
-                    console.error( _this.job_id + ` Failed to execute: ${error}`);
-                    return;
+                    console.error( _this.job_id + ` Failed to execute: ${error}`)
+                    return
                 }
                 if (stdout !== ''){
-                    console.log(stdout);
+                    console.log(stdout)
                 }
             })
             child.on('exit', code => {
                 jobSpecs.thread_count--
-                myEmitter.emit('job-success', _this.job_id);
+                myEmitter.emit('job-success', _this.job_id)
             })
         }
     }
 }
 
-let run = () => {
-    // startServer()
-    parseArgs()
-    checkDeps()
-}
-
-let startServer = () => {
-    app.use(fileUpload());
-    app.listen(3000)
-    app.get('/', function(req, res) {
-        res.sendFile(path.join(__dirname + '/index.html'));
-    });
-
-    app.get("/status", (req, res, next) => {
-        let result = 'job is running...'
-        let jobId = req.query.jobId;
-        let status = jobSpecs.completedJobs.includes(jobId);
-        if (status){
-            result = 'success'
-        }
-        res.json([result])
-    });
-
-    app.get("/status/:jobId", (req, res, next) => {
-        let result = '...'
-        let jobId = req.params.jobId;
-        let status = jobSpecs.completedJobs.includes(jobId);
-        if (status){
-            result = 'success'
-        }
-        res.json(result)
-    });
-
-    app.post('/create-job', function(req, res) {
-        if (Object.keys(req.files).length == 0) {
-          return res.status(400).send('No files were uploaded.');
-        }
-        let jobFile = req.files.jobFile;
-
-        let filePath = path.join(__dirname, jobFile.name);
-      
-        jobFile.mv(filePath, function(err) {
-          if (err)
-            return res.status(500).send(err);
-          let jobId = parseJobFile(filePath)
-          res.send(jobId);
-          checkDeps();
-        });
-      });
-}
-
+//parse command line arguments determine if single process or server processing
 let parseArgs = () => {
-    console.dir(process.argv)
     if (process.argv[2] === 'server'){
         if(process.argv[3] !== undefined){
             jobSpecs.thread_limit = process.argv[3]
         } 
-        startServer();
-        return;
+        startServer()
+        return
     }else if (process.argv[2] === 'process') {
         if (process.argv[3] !== undefined){
             fileName = process.argv[3] 
@@ -117,12 +70,13 @@ let parseArgs = () => {
     if(process.argv[4] !== undefined){
         jobSpecs.thread_limit = process.argv[4]
     } 
-    parseJobFile(path.join(__dirname,fileName));
+    parseJobFile(path.join(__dirname,fileName))
 }
 
+//clean txt file and create job array, return job id for api 
 let parseJobFile = (filePath) => {
     const contents = fs.readFileSync(filePath, 'utf8')
-    const regex = /^#(.*)[\n]|\n$/mg; // regex matching blank new lines & hash comments
+    const regex = /^#(.*)[\n]|\n$/mg // regex matching blank new lines & hash comments
     let lines = contents.replace(regex,"").split('\n') // remove blank lines & comments
     for(let i = 0; i < lines.length; i++){
         let job = {
@@ -150,17 +104,74 @@ let checkDeps = () => {
     }
 }
 
-let checker = (arr, target) => target.every(v => arr.includes(v));
+let checker = (arr, target) => target.every(v => arr.includes(v))
 
+//on completion add job to completion queue and check remaining jobs for dependency
 myEmitter.on('job-success', (job_id) => {
-    //on completion add job to completion queue and check remaining jobs for dependency
-    jobSpecs.completedJobs.push(job_id);
-    checkDeps();
+    jobSpecs.completedJobs.push(job_id)
+    checkDeps()
 })
 
+//remove running jobs from job queue
 myEmitter.on('job-running', (job_id) => {
-    //remove running jobs from job queue
-    jobSpecs.jobQueue = jobSpecs.jobQueue.filter(obj => obj.job_id !== job_id);
+    jobSpecs.jobQueue = jobSpecs.jobQueue.filter(obj => obj.job_id !== job_id)
 })
 
-run(); //main function call
+let run = () => {
+    parseArgs()
+    checkDeps()
+}
+
+run() //main function call
+
+/*********SERVER & API************/
+
+function startServer() {
+    app.use(fileUpload())
+    app.listen(3000)
+
+    //serve generic html file with inputs
+    app.get('/', function(req, res) {
+        res.sendFile(path.join(__dirname + '/index.html'))
+    })
+
+    //handle input job status request
+    app.get("/status", (req, res, next) => {
+        let result = '...'
+        let jobId = req.query.jobId
+        let status = jobSpecs.completedJobs.includes(jobId)
+        if (status){
+            result = 'success'
+        }
+        res.json(result)
+    })
+
+    //handle direct job status request url endpoint
+    app.get("/status/:jobId", (req, res, next) => {
+        let result = '...'
+        let jobId = req.params.jobId
+        let status = jobSpecs.completedJobs.includes(jobId)
+        if (status){
+            result = 'success'
+        }
+        res.json(result)
+    })
+
+    //upload file, begin processing and return job id to client
+    app.post('/create-job', function(req, res) {
+        if (Object.keys(req.files).length == 0) {
+          return res.status(400).send('No files were uploaded.')
+        }
+
+        let jobFile = req.files.jobFile
+        let filePath = path.join(__dirname, jobFile.name)
+      
+        jobFile.mv(filePath, function(err) {
+          if (err) return res.status(500).send(err)
+          let jobId = parseJobFile(filePath)
+          res.send(jobId)
+          checkDeps()
+        })
+    })
+}
+
