@@ -1,8 +1,6 @@
-# id identifying job in rest of file.
+#added sleep commands to jobs 2 & 3 in original test file to test concurrency & status queries
 job_id job1
-# program and arguments. run the program through the bash shell.
 program cat /tmp/file2 /tmp/file3 /tmp/file4
-# jobs depended on.
 parent_job_ids job2 job3 job4
 job_id job2
 program sleep 10 && echo hi > /tmp/file2
