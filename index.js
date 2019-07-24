@@ -137,7 +137,9 @@ function startServer() {
         app = express()
 
     app.use(fileUpload())
+    app.use('/css',express.static(__dirname +'/css'));
     app.listen(3000) 
+
 
     //serve generic html file with inputs
     app.get('/', function(req, res) {

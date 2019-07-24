@@ -1,0 +1,62 @@
+body {
+    text-align: center;
+    font-family: 'Open Sans'
+}
+
+input{
+    font-size: 1.5em;
+    width: 15em;
+    border-radius: 5px;
+    border-width: 1px;
+
+}
+
+.main {
+    height: 100%;
+    width: 100%;
+    display: table;
+}
+
+.button {
+    -moz-box-shadow:    2px 2px 2px 2px #ccc;
+    -webkit-box-shadow: 2px 2px 2px 2px #ccc;
+    box-shadow: 2px 2px 2px 2px #ccc;
+    background-color: darkgray;
+    cursor: pointer;
+}
+
+.button:hover{
+    background-color: gray;
+}
+
+.btn-file-upload{
+    width: 15em;
+    position: relative;
+}
+
+.btn-file-upload:after{
+   content:  'Choose File';
+   position: absolute;
+   top: 0;
+   left: 0;
+   bottom: 0;    
+   width: 40%;
+   -moz-box-shadow:    3px 3px 3px 2px #ccc;
+   -webkit-box-shadow: 3px 3px 3px 2px #ccc;
+   box-shadow: 3px 3px 3px 2px #ccc;
+   background-color: darkgray;
+   cursor: pointer;
+   border-radius: 5px;
+   text-align: center;
+   line-height: 1.5;
+}
+
+.btn-file-upload:hover:after{
+    background-color: gray;
+}
+
+.wrapper {
+    display: table-cell;
+    height: 100%;
+    vertical-align: middle;
+}

@@ -1,20 +1,27 @@
 <html>
+  <head>
+      <link rel="stylesheet" type="text/css" href="css/style.css" />
+  </head>
   <body>
-    <form ref='uploadForm' 
-      id='uploadForm' 
-      action='http://localhost:3000/create-job' 
-      method='post' 
-      encType="multipart/form-data">
-        <input type="file" name="jobFile" />
-        <input type='submit' value='Upload!' />
-    </form> 
-    <form ref='statusRequest' 
-      id='statusRequest' 
-      action='http://localhost:3000/status' 
-      method='get' 
-      encType="multipart/form-data">
-      <input type="text" name="jobId" />
-      <input type='submit' value='Check Status' />
-  </form>      
+      <div class='main'>
+        <div class='wrapper'>
+          <form ref='uploadForm' 
+                id='uploadForm' 
+                action='http://localhost:3000/create-job' 
+                method='post' 
+                encType="multipart/form-data">
+            <input type="file" name="jobFile" class="btn-file-upload"/>
+            <input type='submit' value='Upload Job File' class='button'/>
+          </form> 
+          <form ref='statusRequest' 
+                id='statusRequest' 
+                action='http://localhost:3000/status' 
+                method='get' 
+                encType="multipart/form-data">
+                <input type="text" name="jobId" />
+                <input type='submit' value='Check Status' class='button'/>
+          </form>  
+      </div>  
+    </div>  
   </body>
 </html>
