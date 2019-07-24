@@ -1,7 +1,5 @@
 # Shell Command Jobs Processor
 
-shell command job processor
-
 ## Description
 
 The job processor parses a text file containing a list of jobs. Each job has a program of executable bash commands, and an optional list of parent jobs (dependencies) that need to be executed beforehand. The jobs are processed to determine dependencies and executed accordingly. When possible, jobs are executed concurrently. 
