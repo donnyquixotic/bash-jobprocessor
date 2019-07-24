@@ -99,9 +99,9 @@ If errors occur you may have to install globally:
 
 ## Notes/Future Improvements/Issues
 
-<aside class="warning">
-Warning: This program uploads and executes shell commands locally, it is not advisable to run code, as is, on a public production environment
-</aside>
+<span style="color: red">  
+Warning: This program uploads and executes shell commands locally, it is not advisable to run this, as is, on a public production environment
+</span>
 
 Currently there is no error handling for cyclical dependencies or job status requests for non-existant jobs. 
 
