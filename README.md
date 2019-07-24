@@ -4,7 +4,7 @@
 
 The job processor parses a text file containing a list of jobs. Each job has a program of executable bash commands, and an optional list of parent jobs (dependencies) that need to be executed beforehand. The jobs are processed to determine dependencies and executed accordingly. When possible, jobs are executed concurrently. 
 
-The program can be run standalone to process a single file or can optionally run as a Node/Express server to upload files and check job status via an API.
+The program can be run standalone to process a single file or can optionally run as a Node/Express server to upload files and check current job status using an API.
 
 ## Getting Started
 
@@ -25,9 +25,13 @@ The program can be run standalone to process a single file or can optionally run
 
 * the jobs file is expected to be in the home directory of the project `path/to/bash-jobprocessor/<file>`
 * each job should follow the following format:
+
  `job_id` - name of the job
+
  `program` - the shell command to be executed when the job is run
+
  `parent_job_ids` - optional space delimeted list of any other jobs that should be completed before executing
+
 * jobs do not need to be listed in topological or dependent order, this is determined during processing
 * example:
  ```
@@ -45,37 +49,33 @@ The program can be run standalone to process a single file or can optionally run
  program cat /tmp/file2 > /tmp/file4; echo again >> /tmp/file4
  parent_job_ids job2
  ```
-* comments & empty lines are ignored, program commands are expected not to have newlines
+* comments & empty lines are ignored during processing & job programs are expected to be one line (no line breaks within the program)
 
 ### Process a Single File
 
   `npm run process <file_name> <thread_limit>` 
 
-* where `file_name` is the local job file and `thread_limit` is an *optional* number indicating an upper limit for how many  concurrent jobs should be allowed to execute at any given time, if `thread_limit` is not provided, it is set to 999 by default
+* `file_name` is the local job file and `thread_limit` is an *optional* number indicating an upper limit for how many  concurrent jobs should be allowed to execute at any given time, if `thread_limit` is not provided, it is set to 999 by default
 
-### Running the Server & API
+### Run the Server & API
 
   `npm run server <thread_limit>`
 
-* where `thread_limit` is the same *optional* argument discussed above
+* `thread_limit` is the same *optional* argument discussed above
 
-* this will start the server viewed locally at http://localhost:3000
+* server can be viewed locally at http://localhost:3000
 
-* there are basic html inputs to optionally upload a job file and/or check on a job's status
+* basic html inputs to optionally upload a job file and/or check on a job's status
 
-* select a jobs file from anywhere on your local machine and click 'Upload' 
+* select a jobs file from anywhere on your local machine and click 'Upload', file will be copied to the repository's home directory and automatically processsed
 
-* it will download the file into the project home directory and automatically process it 
+* a successful upload returns the first `job_id` listed in the file, any `stdout` will be displayed in terminal where server was started
 
-* on successful upload it will return the first `job_id` listed in the file, any `stdout` will be displayed in terminal where server was started
+* enter any `job_id` into the input and click 'check status', a message of 'success' will be displayed/returned if job has completed or upon completion if it is still running 
 
-* you can enter the job Id into the input and click 'Check status' to return the status of the job 
+* optionally, use the endpoint directly to check status using http://localhost:3000/<job_id> 
 
-* if it is currently running it will display elipses '...' until it has completed then the status will automatically update to 'success' 
-
-* you can optionally use the endpoint directly to check status using http://localhost:3000/<job_id> 
-
-* if you prefer you can use node directly:
+* if you prefer to use node directly:
 
   `node index.js process <file_name> <thread_limit>` 
 
