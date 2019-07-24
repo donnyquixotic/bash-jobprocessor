@@ -49,13 +49,13 @@ The program can be run standalone to process a single file or can optionally run
 
 ### Process a Single File
 
- `npm run process <file_name> <thread_limit>` 
+  `npm run process <file_name> <thread_limit>` 
 
 * where `file_name` is the local job file and `thread_limit` is an *optional* number indicating an upper limit for how many  concurrent jobs should be allowed to execute at any given time, if `thread_limit` is not provided, it is set to 999 by default
 
 ### Running the Server & API
 
- `npm run server <thread_limit>`
+  `npm run server <thread_limit>`
 
 * where `thread_limit` is the same *optional* argument discussed above
 
@@ -77,14 +77,16 @@ The program can be run standalone to process a single file or can optionally run
 
 * if you prefer you can use node directly:
 
- `node index.js process <file_name> <thread_limit>` 
+  `node index.js process <file_name> <thread_limit>` 
 
- `node index.js server <thread_limit>`
+  `node index.js server <thread_limit>`
 
 
 ## Notes
 
-A previous version used a topological sort to arange the jobs in order of dependency as in a directed graph before iterating over the jobs but the execution time difference was negligible for smaller files and my small sample testing showed the topological sort to average a little slower. 
+Currently there is no error handling for cyclical dependencies.
+
+A previous version used a topological sort to arange the jobs in order of dependency as in a directed graph before iterating over the jobs but the execution time (though did detect circular dependencies before processing any jobs) difference was negligible for smaller files and my small sample testing showed the topological sort to average a little slower. 
 
 ## External modules used
 
