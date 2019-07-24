@@ -17,8 +17,9 @@ The program can be run standalone to process a single file or can optionally run
 
 ### Installing
 
-* clone repo
-* run `npm install`
+* `git clone https://github.com/DonaldPeat/bash-jobprocessor.git`
+* `cd bash-jobprocessor`
+* `npm install`
 
 ### Jobs File
 
