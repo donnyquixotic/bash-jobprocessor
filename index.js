@@ -4,7 +4,7 @@ const fs = require('fs'),
     path = require('path'),
     { exec } = require('child_process'),
     events = require('events'),
-    myEmitter = new events.EventEmitter(),
+    jobEmitter = new events.EventEmitter(),
 
     //main job object for tracking job completion & concurent processes
     jobSpecs = {
@@ -26,7 +26,7 @@ class JobClass {
         let _this = this
         if (jobSpecs.thread_count < jobSpecs.thread_limit){
             jobSpecs.thread_count++
-            myEmitter.emit('job-running', this.job_id)
+            jobEmitter.emit('job-running', this.job_id)
             const child = exec(this.program, function(error, stdout, stderr){
                 if (error) {
                     console.error( _this.job_id + ` Failed to execute: ${error}`)
@@ -38,7 +38,7 @@ class JobClass {
             })
             child.on('exit', code => {
                 jobSpecs.thread_count--
-                myEmitter.emit('job-success', _this.job_id)
+                jobEmitter.emit('job-success', _this.job_id)
             })
         }
     }
@@ -109,13 +109,13 @@ let checkDeps = () => {
 let checker = (arr, target) => target.every(v => arr.includes(v))
 
 //on completion add job to completion queue and check remaining jobs for dependency
-myEmitter.on('job-success', (job_id) => {
+jobEmitter.on('job-success', (job_id) => {
     jobSpecs.completedJobs.push(job_id)
     checkDeps()
 })
 
 //remove running jobs from job queue
-myEmitter.on('job-running', (job_id) => {
+jobEmitter.on('job-running', (job_id) => {
     jobSpecs.jobQueue = jobSpecs.jobQueue.filter(obj => obj.job_id !== job_id)
 })
 
@@ -154,7 +154,7 @@ function startServer() {
             res.send('success')
         }
         //if the job hasn't completed it will wait the exit event 
-        myEmitter.on('job-success', async (job_id) => {
+        jobEmitter.on('job-success', async (job_id) => {
             if (jobId == job_id){
                 try {
                     await res.send('success')
@@ -176,7 +176,7 @@ function startServer() {
         }
         //if the job hasn't completed it will wait the exit event 
     
-        myEmitter.on('job-success', async (job_id) => {
+        jobEmitter.on('job-success', async (job_id) => {
             if (jobId == job_id){
                 try {
                     await res.send('success')
