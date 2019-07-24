@@ -88,6 +88,8 @@ Currently there is no error handling for cyclical dependencies or job status req
 
 A previous version used a topological sort to arange the jobs in order of dependency as in a directed graph before iterating over the jobs but the execution time (though did detect circular dependencies before processing any jobs) difference was negligible for smaller files and my small sample testing showed the topological sort to average a little slower. 
 
+Ideally there would be a testing suite using mocha/chai, more refactoring, and more error handling for edge cases & bad input
+
 ## External modules used
 
 express - https://www.npmjs.com/package/express
