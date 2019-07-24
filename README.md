@@ -15,39 +15,39 @@ The program can be run standalone to process a single file or can optionally run
 
 ### Installing
 
-`git clone https://github.com/DonaldPeat/bash-jobprocessor.git`
+  `git clone https://github.com/DonaldPeat/bash-jobprocessor.git`
 
-`cd bash-jobprocessor`
+  `cd bash-jobprocessor`
 
-`npm install`
+  `npm install`
 
 ### Jobs File
 
 * the jobs file is expected to be in the home directory of the project `path/to/bash-jobprocessor/<file>`
 * each job should follow the following format:
 
- `job_id` - name of the job
+   `job_id` - name of the job
 
- `program` - the shell command to be executed when the job is run
+   `program` - the shell command to be executed when the job is run
 
- `parent_job_ids` - optional space delimeted list of any other jobs that should be completed before executing
+   `parent_job_ids` - optional space delimeted list of any other jobs that should be completed before executing
 
 * jobs do not need to be listed in topological or dependent order, this is determined during processing
 * example:
  ```
- # id identifying job in rest of file.
- job_id job1
- # program and arguments. run the program through the bash shell.
- program cat /tmp/file2 /tmp/file3 /tmp/file4
- # jobs depended on.
- parent_job_ids job2 job3 job4
- job_id job2
- program echo hi > /tmp/file2
- job_id job3
- program echo bye > /tmp/file3
- job_id job4
- program cat /tmp/file2 > /tmp/file4; echo again >> /tmp/file4
- parent_job_ids job2
+   # id identifying job in rest of file.
+   job_id job1
+   # program and arguments. run the program through the bash shell.
+   program cat /tmp/file2 /tmp/file3 /tmp/file4
+   # jobs depended on.
+   parent_job_ids job2 job3 job4
+   job_id job2
+   program echo hi > /tmp/file2
+   job_id job3
+   program echo bye > /tmp/file3
+   job_id job4
+   program cat /tmp/file2 > /tmp/file4; echo again >> /tmp/file4
+   parent_job_ids job2
  ```
 * comments & empty lines are ignored during processing & job programs are expected to be one line (no line breaks within the program)
 
@@ -89,13 +89,13 @@ A testing suite has been started but TDD was not strictly adopted in the interes
 
 run tests:
 
-`npm test` or `jasmine-node spec/`
+  `npm test` or `jasmine-node spec/`
 
 Additional tests should follow the naming convention of `FooSpec.js`, `BarSpec.js`, case-sensitive and saved in the `spec/` directory 
 
 If errors occur you may have to install globally:
 
-`npm install jasmine-node -g`
+  `npm install jasmine-node -g`
 
 ## Notes/Future Improvements/Issues
 
